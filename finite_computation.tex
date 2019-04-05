@@ -102,6 +102,54 @@
     % \newpage
     
     \section{Defining computation}
+    Computers are stupid. We need to describe algorithms precisely.
+
+    Informal definition of an algorithm: An Algorithm is a set of instructions of how to compute an output from an input by following a sequence of ``elementary steps''. An algorithm $A$ computes a function $F$ if for every input $x$, if we follow the instructions of $A$ on the input $x$, we obtain the output $F(x)$.
+
+    \subsection{Boolean circuit}
+    \begin{defi}[Boolan circuits]
+        Let $n,m,s$ be positive integers with $s \geq m$. A Boolean circuit with $n$ inputs, $m$ outputs, and $s$ gates, is a labeled directed acyclic graph (DAG) $G = (V, E)$ with $s+n$ vertices satisfying the following properties:
+        \begin{enumerate}
+            \item Exactly $n$ of the vertices have no in-neighbors. These vertices are know as inputs and are labeled with the $n$ labels: $X[0], \cdots, X[n-1]$.
+            \item The other $s$ vertices are known as gates. Each gate is labeled with $\land, \lor$ and $\lnot$. Gates labeled with $\land$ or $\lor$ have two in-neighbors. Gates labeled with $\lnot$ have one in-neighbor. We will allow parallel edges (and so for example an AND gate can have both its in-neighbors be the same vertex).
+            \item Exactly $m$ of the gates are also labeled with the $m$ labels $Y[0], \cdots, Y[m-1]$ (in addition to their label $\land, \lor, \lnot$). These are known as outputs.
+        \end{enumerate}
+
+        Let $f:\{0,1\}^n \rightarrow \{0,1\}^m$. We say that the circuit $C$ computes $f$ if for every $x \in \{0,1\}^n$, $C(x) = f(x)$.
+    \end{defi}
+
+    Briefly speaking, the computation of a Boolean circuit is layer by layer.
+
+    \begin{defi} [AON-CIRC Programming language]
+        An AON-CIRC program is a string of lines of the form foo = AND(bar,blah) , foo = OR(bar,blah) and foo = NOT(bar) where foo , bar and blah are variable names. Variables of the form $X[i]$ are known as input variables, and variables of the form $Y[j]$ are known as output variables. In every line, the variables on the righthand side of the assignment operators must either be input variables or variables that have already been assigned a value before.
+    \end{defi}
+
+    \begin{theo}[Equivalence of circuits and straight-line programs]
+        Let $f: \{0,1\}^n \rightarrow \{0,1\}^m$ and $s \geq m$ be some number. Then $f$ is
+        computable by a Boolean circuit of $s$ gates if and only if $f$ is computable by an AON-CIRC program of $s$ lines.
+    \end{theo}
+
+    \subsection{The NAND function}
+    \begin{theo}
+        NAND computes AND, OR, NOT. We can compute AND, OR, and NOT by composing only the NAND function.
+    \end{theo}
+    \begin{align*}
+        NOT(a) &= NAND(a,a) \\
+        AND(a,b) &= NOT(NAND(a,b)) \\
+        OR(a,b) &= NOT(NOT(NOT(a),NOT(b)))
+    \end{align*}
+
+    \begin{theo}
+        NAND is a universal operation. For every Boolean circuit $C$ of $s$ gates, there exists a NAND circuit $C'$ of at most $3s$ gates that computes the same function as $C$.
+    \end{theo}
+
+    Just like we did for Boolean circuits, we can define a programming-language analog of NAND circuits. It is even simpler than the AON-CIRC language since we only have a single operation. 
+
+    \begin{theo}[Equivalence of NAND circuits and straight-line programs]
+        Let $f: \{0,1\}^n \rightarrow \{0,1\}^m$ and $s \geq m$ be some number. Then $f$ is
+        computable by a NAND circuit of $s$ gates if and only if $f$ is computable by an NAND-CIRC program of $s$ lines.
+    \end{theo}
+
 
     
 \end{document}
