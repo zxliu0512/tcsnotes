@@ -150,6 +150,39 @@
         computable by a NAND circuit of $s$ gates if and only if $f$ is computable by an NAND-CIRC program of $s$ lines.
     \end{theo}
 
+    \section{Syntactic sugar, and computing every function}
+    ``syntactic sugar'' in programming language: not changing the definition of the language, but merely introducing some convenient notational shortcuts.1 We will use several such ``syntactic sugar'' constructs to make our descriptions of NAND-CIRC programs shorter and simpler.
+
+    \section{SOME EXAMPLES SYNTACTIC SUGAR}
+    \begin{itemize}
+        \item Constants
+        \item Functions / Macros
+        \item Conditional statements: foo = IF(condition,blah, foo)
+    \end{itemize}
+    
+    \section{THE LOOKUP FUNCTION}
+    \begin{defi} [Lookup function]
+        For every $k$, the lookup function $LOOKUP_k: \{0, 1\}^{2^k + k} \rightarrow \{0, 1\}$ is defined as follows: For every $x \in \{0, 1\}^{2^k}$ and $i \in \{0, 1\}^𝑘$,
+        \begin{equation}
+            LOOKUP_k(x,i) = x_i
+        \end{equation}
+    \end{defi}
+
+    \begin{theo} [Lookup function]
+        For every $k$, there is a NAND-CIRC program that computes the function $LOOKUP_k: \{0, 1\}^{2^k+k} \rightarrow \{0, 1\}$. Moreover, the number of lines in this program is at most $4 \cdot 2^k$.
+    \end{theo}
+
+    \begin{lemma} [Lookup function]
+        For every $k \geq 2$, $LOOKUP_k(x_0, \cdots, x_{2^k-1}, i_0, \cdots, i_{k-1})$ is equal to
+        \begin{equation}
+            IF(i_0, LOOKUP_k(x_0, \cdots, x_{2^{k-1}-1}, i_1, \cdots, i_{k-1}), LOOKUP_k(x_{2^{k-1}}, \cdots, x_{2^k-1}, i_1, \cdots, i_{k-1}))
+        \end{equation}
+    \end{lemma}
+
+    \section{COMPUTING EVERY FUNCTION}
+    \begin{theo} [Universality of NAND]
+        There exists some constant $c > 0$ such that for every $n, m > 0$ and function $f : \{0, 1\}^n \to \{0, 1\}^m$, there is a NAND circuit with at most $c \cdot m 2^n$ gates that computes the function $f$.
+    \end{theo}
 
     
 \end{document}
