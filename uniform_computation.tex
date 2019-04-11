@@ -1,0 +1,174 @@
+\documentclass[aps,pra,onecolumn,notitlepage,superscriptaddress]{revtex4-1}
+
+%\input{myQcircuit}
+\usepackage{graphicx,color}% Include figure files
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{bm}% bold math
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{framed}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{wrapfig}
+\usepackage{mathtools}
+\usepackage{listings}
+
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+
+
+%  Sets
+\newcommand{\set}[1]{\mathsf{#1}}
+\newcommand{\grp}[1]{\mathsf{#1}}
+\newcommand{\spc}[1]{\mathcal{#1}}
+
+% Integrals
+
+\def\d{{\rm d}}
+
+% Linear structures
+\newcommand{\Span}{{\mathsf{Span}}}
+\newcommand{\Lin}{\mathsf{Lin}}
+\newcommand{\rank}{\mathsf{rank}}
+
+\def\>{\rangle}
+\def\<{\langle}
+\def\kk{\>\!\>}
+\def\bb{\<\!\<}
+\def\l{\leftarrow}
+\def\r{\rightarrow}
+\def\u{\underline}
+\def\y{\vdash}
+\def\ys{\vdash^*}
+\newcommand{\st}[1]{\mathbf{#1}}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+
+% Linear maps
+\newcommand{\map}[1]{\mathcal{#1}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\diag}{\mathsf{diag}}
+
+% languages
+\newcommand{\reg}{\mathsf{reg}}
+\newcommand{\Lan}{\mathsf{L}}
+
+
+%  Operational notions
+\newcommand{\op}[1]{\operatorname{#1}}
+
+\newcommand{\St}{{\mathsf{St}}}
+\newcommand{\Eff}{{\mathsf{Eff}}}
+\newcommand{\Pur}{{\mathsf{Pur}}}
+\newcommand{\Transf}{{\mathsf{Transf}}}
+\newcommand{\Chan}{{\mathsf{Chan}}}
+
+
+%   By Mo
+\newcommand{\arccot}{\mathrm{arccot}\,}
+
+%  Miscellanea
+\newcommand\myuparrow{\mathord{\uparrow}}
+\newcommand\mydownarrow{\mathord{\downarrow}}
+\newcommand\h{{\scriptstyle \frac 12}}
+
+% Environments
+\newtheorem{theo}{Theorem}
+\newtheorem{ax}{Axiom}
+\newtheorem{lemma}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{defi}{Definition}
+
+
+\newtheorem{rem}{Remark}
+\newtheorem{ex}{Exercise}
+\newtheorem{proper}{Property}
+\newtheorem{exa}{Example}
+
+\def\Proof{{\bf Proof.~}}
+\def\qed{$\blacksquare$ \newline}
+
+\begin{document}
+	% \preprint{APS/123-QED}
+    \title{UNIFORM COMPUTATION}
+    \author{}
+    \maketitle
+    % \tableofcontents
+    % \newpage
+    
+    \section{Loops and infinity}
+    \subsection{Turing machines}
+    \subsection{NAND-TM}
+    NAND-TM = NAND-CIRC + loops + arrays
+    \begin{enumerate}
+        \item We add a special integer valued variable $i$. All other variables in NAND-TM will be Boolean valued (as in NAND-CIRC).
+        \item We add arrays to the language by allowing variable identifiers to have the form Foo[i] with i being the special integer-valued variable mentioned above. Foo is an array of Boolean values, and Foo[i] refers to the value of this array at location equal to the current value of the variable i.
+        \item We use the convention that arrays always start with a capital letter, and scalar variables (which are never indexed with i) start with lowercase letters. Hence Foo is an array and bar is a scalar variable.
+        \item The input and output X and Y are now considered arrays with values of zeroes and ones.
+        \item We add a special MODANDJUMP instruction that takes two boolean variables $a, b$ as input and does the following:
+        \begin{itemize}
+            \item a=1,b=1
+            \item a=0,b=1
+            \item a=1,b=0
+            \item a=0,b=0
+        \end{itemize}
+    \end{enumerate}
+
+    \begin{theo}
+        Turing machines and NAND-TM programs are equivalent. For every $F: \{0, 1\}^* \to \{0, 1\}^*$, $F$ is computable by a NAND-TM program $P$ if and only if there is a Turing Machine $M$ that computes $F$.
+    \end{theo}
+
+    \section{Equivalent models of computation}
+    \subsection{RAM machines and NAND-RAM}
+    \subsection{Lambda calculus}
+    We start with ``basic expressions'' that contain a single variable such as $x$ or $y$ and build more complex expressions using the following two rules:
+    \begin{enumerate}
+        \item Application: If $e$ and $e'$ are $\lambda$ expressions, then the $\lambda$ expression $(ee')$ corresponds to applying the function described by $e$ to the input $e'$.
+        \item Abstraction: If $e$ is an expression and $x$ is a variable, then the $\lambda$ expression $\lambda x . (e)$ corresponds to the function that on any input $z$ returns the expression $e[x \to z]$ replacing all (free) occurrences of $x$
+        in $e$.
+    \end{enumerate}
+
+    \begin{defi}[$\lambda$ expression]
+        A $\lambda$ expression is either a single variable identifier or an expression that is built from other expressions using the application and abstraction operations.  
+    \end{defi}
+
+    \begin{defi}
+        [Equivalence of $\lambda$ expressions] Two λ expressions are equivalent if they can be made into the same expression by repeated applications of the following rules:
+        \begin{enumerate}
+            \item Evaluation ($\beta$ reduction): The expression $(\lambda x.exp)exp'$ is equivalent to $exp[x \to exp']$.
+            \item Variable renaming ($\alpha$ conversion): The expression $\lambda x.exp$ is equivalent to $\lambda y.exp[x \to y]$.
+        \end{enumerate}
+    \end{defi}
+
+    Example: DOUBLE
+    \begin{equation}
+        DOUBLE \ f = \lambda f.(\lambda x.f(fx))
+    \end{equation}
+
+    \subsection{The ``ENHANCE'' $\lambda$ Calculus}
+    The enhanced $\lambda$ calculus includes the following set of objects and operations:
+    \begin{itemize}
+        \item Boolean constants and IF function: The enhanced λ calculus has the constants 0 and 1 and the IF function such that for every $cond \in \{0, 1\}$ and $\lambda$ expressions $a$, $b$, IF cond $a$ $b$ outputs $a$ if $cond = 1$ and outputs b if $cond = 0$.
+        \item Pairs: We have the function PAIR such that $PAIR \ x \ y$ returns the pair $(x, y)$ that holds $x$ and $y$.
+        \item Lists and strings: Using PAIR we can also construct lists. The idea is that $PAIR\ a\ L$ corresponds to the list obtained by adding the element $a$ to the beginning of a list $L$. A string is simply a list of bits.
+        \item List operations: MAP, REDUCE, and FILTER.
+        \item Recursion: if we have a function $F$ taking two parameters $me$ and $x$, then RECURSE $F$ will be the function $f$ taking one parameter $x$ such that $f(x) = F (f, x)$ for every $x$.
+    \end{itemize}
+
+    \subsubsection{Enhanced $\lambda$ expressions}
+    
+
+
+
+
+
+
+
+
+    
+\end{document}
